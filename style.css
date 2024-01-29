@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+
+* {
+    cursor: url(https://external-media.spacehey.net/media/sa2hXa1nnLg8B41ZQxZyT3bDXoBcLnyj9nhwIm1acLYg=/https://files.catbox.moe/rtwzrn.png), auto;
+}
+
+:root {
+    --light-gray: #f2f0f0;
+    --gray: #e3e3e3;
+    --dark-gray: #919191;
+    --darker-gray: #545454;
+    --logo-blue: #1D4ED8;
+    --darker-blue: #1E40AF;
+    --lighter-blue: #60A5FA;
+    --even-lighter-blue: #90F3E1;
+    --lightest-blue: #DBEAFE;
+    --red: #FF0000;
+    --dark-orange: #ED0707;
+    --light-orange: #f9c56c;
+    --even-lighter-orange: #fcdbb8;
+    --strange-yellow: #dbae2e;
+    --green: #34D399;
+    --light-green: #E6F8DD;
+    --medium-green: #A0C99C;
+    --dark-green: #059669;
+    accent-color: #1D4ED8;
+    accent-color: var(--logo-blue);
+}
+
+body {
+    background-image: url(https://cdn.discordapp.com/attachments/961277968259379220/1066089744414552137/FHDbgresizebetter.png); 
+    background-color: transparent;
+    background-attachment: fixed;
+    font-family: 'pixelify sans';
+    font-size: 17px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #adc7d4;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #df9adc;
+    border: 2px none;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #df9adc;
+}
+
+p {
+    color: #4d23cf;
+    font-weight: 600;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4d23cf;
+}
+
+.container{
+    margin: 0 auto;
+    width: 512px;
+    background-color: var(--even-lighter-blue);
+    box-shadow: inset 0px 0px 0px 4px #90F3E1, inset 0px 0px 0px 6px #4D23CD, 4px 4px #4e23cd48;
+    border: 2px solid #4D23CD;
+    height: fit-content;
+    text-align: center;
+}
+.ctx{
+    background-color: white;
+    border:3px solid var(--darker-blue);
+}
+
+div[itemprop="Paint"]:before {
+    display: block;
+    padding: 8px;
+    padding-left: 12px;
+    background-color: #EFCFEF;
+    box-shadow: inset 0px 0px 0px 4px #90F3E1, inset 0px 0px 0px 6px #4D23CD;
+    border-bottom: 2px solid #4D23CD;
+    color: #4D21CB;
+    background-image: url(https://external-media.spacehey.net/media/s38zZmGIizgADY3spcLBnWdlWH5o3cz5DhdEOQIiWOhU=/https://files.catbox.moe/ql6gqv.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    padding-right: 12px;
+    font-weight: 400;
+    content: "Paint";
+    font-size: 18px;
+    text-align: left;
+    letter-spacing: 0.045em;
+}
+
+.formas{
+    position: relative;
+    float: left;
+}
+
+.icon{
+    width: 4rem;
+    height: 4rem;
+    text-align: center;
+    background-color: transparent;
+    cursor: pointer;
+    margin: 1rem;
+}
+.form-box{
+    margin: 0 auto;
+    padding: 1px;
+    width: 60%;
+    height: 60%;
+    background-color: transparent;
+    cursor: pointer;
+}
+.linea {
+    margin: 5px auto;
+    width: 10%;
+    height: 80%;
+    transform: rotate(45deg);
+    background-color: #4D23CD;
+    opacity: 0.5;
+    cursor: pointer;
+}
+.cuadrado{
+    margin: 5px auto;
+    width: 50%;
+    height: 50%;
+    border: solid 4px #4D23CD;
+    opacity: 0.5;
+    cursor: pointer;
+}
+.rectangle{
+    margin: 5px auto;
+    width: 80%;
+    height: 40%;
+    border: solid 4px #4D23CD;
+    opacity: 0.5;
+    cursor: pointer;
+}

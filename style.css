@@ -146,3 +146,12 @@ div[itemprop="Paint"]:before {
     opacity: 0.5;
     cursor: pointer;
 }
+.circle{
+    margin: 5px auto;
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    border: solid 4px #4D23CD;
+    opacity: 0.5;
+    cursor: pointer;
+}

@@ -6,22 +6,22 @@ document.addEventListener("DOMContentLoaded", function() {
     let x1, y1;
     let selectedMode = null;
 
-    // Manejar el clic en el enlace "linea"
     document.getElementById("lineaBtn").addEventListener("click", function() {
         selectedMode = "linea";
     });
 
-    // Manejar el clic en el enlace "sqr"
     document.getElementById("sqrBtn").addEventListener("click", function() {
         selectedMode = "sqr";
     });
 
-    // Manejar el clic en el enlace "rect"
     document.getElementById("rectBtn").addEventListener("click", function() {
         selectedMode = "rect";
     });
+    
+    document.getElementById("circleBtn").addEventListener("click", function() {
+        selectedMode = "circle";
+    });
 
-    // Manejar el clic en el canvas
     canvas.addEventListener("click", function(event) {
         if (selectedMode) {
             if (!isDrawing) {
@@ -35,10 +35,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 const x2 = Math.round(event.clientX - rect.left);
                 const y2 = Math.round(event.clientY - rect.top);
 
-                // Llamar a la función correspondiente según el modo seleccionado
                 switch (selectedMode) {
                     case "linea":
-                        bresenham(x1, y1, x2, y2, ctx);
+                        dda(x1, y1, x2, y2, ctx);
                         break;
                     case "sqr":
                         scuer(x1, y1, x2, y2, ctx);
@@ -46,6 +45,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     case "rect":
                         rectangle(x1, y1, x2, y2, ctx);
                         break;
+                    case "circle":
+                        const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        circleBres(x1, y1, r, ctx);
+                        break;    
                     default:
                         break;
                 }
@@ -113,10 +116,10 @@ function scuer(x, y, x2, y2, ctx) {
     let x1 = x + length * xSign;
     let y1 = y + length * ySign;
 
-    bresenham(x, y, x1, y, ctx);
-    bresenham(x1, y, x1, y1, ctx);
-    bresenham(x1, y1, x, y1, ctx);
-    bresenham(x, y1, x, y, ctx);
+    dda(x, y, x1, y, ctx);
+    dda(x1, y, x1, y1, ctx);
+    dda(x1, y1, x, y1, ctx);
+    dda(x, y1, x, y, ctx);
 }
 
 //rectangle
@@ -129,8 +132,40 @@ function rectangle(x, y, x2, y2, ctx) {
     let x1 = x + width * xSign;
     let y1 = y + height * ySign;
 
-    bresenham(x, y, x1, y, ctx); 
-    bresenham(x1, y, x1, y1, ctx); 
-    bresenham(x1, y1, x, y1, ctx); 
-    bresenham(x, y1, x, y, ctx); 
+    dda(x, y, x1, y, ctx); 
+    dda(x1, y, x1, y1, ctx); 
+    dda(x1, y1, x, y1, ctx); 
+    dda(x, y1, x, y, ctx); 
+}
+// circle
+function Circle(xc, yc, x, y, ctx) {
+    ctx.fillRect(xc + x, yc + y, 1, 1);
+    ctx.fillRect(xc - x, yc + y, 1, 1);
+    ctx.fillRect(xc + x, yc - y, 1, 1);
+    ctx.fillRect(xc - x, yc - y, 1, 1);
+    ctx.fillRect(xc + y, yc + x, 1, 1);
+    ctx.fillRect(xc - y, yc + x, 1, 1);
+    ctx.fillRect(xc + y, yc - x, 1, 1);
+    ctx.fillRect(xc - y, yc - x, 1, 1);
+}
+
+function circleBres(xc, yc, r, ctx) {
+    let x = 0;
+    let y = r;
+    let d = 3 - 2 * r;
+    
+    Circle(xc, yc, x, y, ctx);
+    
+    while (y >= x) {
+        x++;
+        
+        if (d > 0) {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        } else {
+            d = d + 4 * x + 6;
+        }
+        
+        Circle(xc, yc, x, y, ctx);
+    }
 }

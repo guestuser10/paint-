@@ -14,30 +14,46 @@
             <div class="form-box">
                 <div class="linea"></div>   
             </div>
-            <a href="">line</a>
+            <a onclick="event.preventDefault();">line</a>
         </div>
         <div class="icon" id="sqrBtn">
             <div class="form-box">
                 <div class="cuadrado"></div>   
             </div>
-            <a href="">sqr</a>
+            <a onclick="event.preventDefault();">sqr</a>
         </div>
         <div class="icon" id="rectBtn">
             <div class="form-box">
                 <div class="rectangle"></div>   
             </div>
-            <a href="">rect</a>
+            <a onclick="event.preventDefault();">rect</a>
         </div>
         <div class="icon" id="circleBtn">
             <div class="form-box">
                 <div class="circle"></div>   
             </div>
-            <a href="">circle</a>
+            <a onclick="event.preventDefault();">circle</a>
         </div>
     </span>
     <div class="container" itemprop="Paint"  >
-        <canvas id="myCanvas" width="500" height="500" style="border:1px solid #000;" class="ctx"></canvas>
+        <canvas id="myCanvas" width="700" height="500" style="border:1px solid #000;" class="ctx"></canvas>
     </div>
+    <span class="config" >
+        <div class="datos" style="padding: 5px;">
+            <div style="padding: 5px;">
+                <label for="">Color</label>
+                <input type="color" id="color">
+            </div>
+            <div style="padding: 5px;">
+                <label for="">width</label>
+                <input type="number" id="grosor" value="1" min="1" max="100">
+            </div>
+            <div style="padding: 5px; visibility: hidden;"  id="sidesbox">
+                <label for="">sides</label>
+                <input type="number" id="sides" value="1" min="1" max="100">
+            </div>
+        </div>
+    </span>
     <script src="app.js"></script>
 
 </body>

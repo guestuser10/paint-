@@ -1,7 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
-    
+
+    const basecolorInput = document.getElementById("color");
+    var color = basecolorInput.value;
+
+    const basewidthInput = document.getElementById("grosor");
+    var grosor = basewidthInput.value;
+
     let isDrawing = false;
     let x1, y1;
     let selectedMode = null;
@@ -22,6 +28,16 @@ document.addEventListener("DOMContentLoaded", function() {
         selectedMode = "circle";
     });
 
+    basecolorInput.addEventListener("change", function() {
+        const colorInput = document.getElementById("color");
+        color = colorInput.value;
+    });
+    basewidthInput.addEventListener("change", function() {
+        const widthInput = document.getElementById("grosor");
+        grosor = widthInput.value;
+    });
+
+
     canvas.addEventListener("click", function(event) {
         if (selectedMode) {
             if (!isDrawing) {
@@ -37,13 +53,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 switch (selectedMode) {
                     case "linea":
-                        dda(x1, y1, x2, y2, ctx);
+                        dda(x1, y1, x2, y2, ctx, color, grosor);
                         break;
                     case "sqr":
-                        scuer(x1, y1, x2, y2, ctx);
+                        scuer(x1, y1, x2, y2, ctx, color, grosor);
                         break;
                     case "rect":
-                        rectangle(x1, y1, x2, y2, ctx);
+                        rectangle(x1, y1, x2, y2, ctx, color, grosor);
                         break;
                     case "circle":
                         const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
@@ -87,14 +103,17 @@ function bresenham(x1, y1, x2, y2, ctx) {
     }
 }
 
-function dda(x, y, x2, y2, ctx) {
+function dda(x, y, x2, y2, ctx, color, width) {
+    ctx.linewidth = width;
+    console.log(width)
+    ctx.fillStyle = color;
     const dx = x2 - x;
     const dy = y2 - y;
 
     const pasos = Math.abs(dx) > Math.abs(dy) ? Math.abs(dx) : Math.abs(dy);
-
+    
     if (pasos === 0) {
-        ctx.fillRect(Math.round(x), Math.round(y), 1, 1);
+        ctx.fillRect(Math.round(x), Math.round(y), width, width);
         return;
     }
     const xInc = dx / pasos;
@@ -102,13 +121,13 @@ function dda(x, y, x2, y2, ctx) {
     
     for (let i = 0; i <= pasos; i++) {
         const yPos = y >= 0 ? y : Math.abs(y);
-        ctx.fillRect(Math.round(x), Math.round(yPos), 1, 1);
+        ctx.fillRect(Math.round(x), Math.round(yPos), width, width);
         x += xInc;
         y += yInc;
     }
 }
 //cuadrado
-function scuer(x, y, x2, y2, ctx) {
+function scuer(x, y, x2, y2, ctx, color, grosor) {
     let length = Math.min(Math.abs(x2 - x), Math.abs(y2 - y));
     let xSign = Math.sign(x2 - x);
     let ySign = Math.sign(y2 - y);
@@ -116,14 +135,14 @@ function scuer(x, y, x2, y2, ctx) {
     let x1 = x + length * xSign;
     let y1 = y + length * ySign;
 
-    dda(x, y, x1, y, ctx);
-    dda(x1, y, x1, y1, ctx);
-    dda(x1, y1, x, y1, ctx);
-    dda(x, y1, x, y, ctx);
+    dda(x, y, x1, y, ctx , color, grosor);
+    dda(x1, y, x1, y1, ctx, color, grosor);
+    dda(x1, y1, x, y1, ctx, color, grosor);
+    dda(x, y1, x, y, ctx, color, grosor);
 }
 
 //rectangle
-function rectangle(x, y, x2, y2, ctx) {
+function rectangle(x, y, x2, y2, ctx , color, grosor) {
     let width = Math.abs(x2 - x);
     let height = Math.abs(y2 - y);
     let xSign = Math.sign(x2 - x);
@@ -132,10 +151,10 @@ function rectangle(x, y, x2, y2, ctx) {
     let x1 = x + width * xSign;
     let y1 = y + height * ySign;
 
-    dda(x, y, x1, y, ctx); 
-    dda(x1, y, x1, y1, ctx); 
-    dda(x1, y1, x, y1, ctx); 
-    dda(x, y1, x, y, ctx); 
+    dda(x, y, x1, y, ctx, color, grosor); 
+    dda(x1, y, x1, y1, ctx, color, grosor); 
+    dda(x1, y1, x, y1, ctx, color, grosor); 
+    dda(x, y1, x, y, ctx, color, grosor); 
 }
 // circle
 function Circle(xc, yc, x, y, ctx) {

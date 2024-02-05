@@ -33,6 +33,7 @@ body {
     background-attachment: fixed;
     font-family: 'pixelify sans';
     font-size: 17px;
+    display: flex;
 }
 
 /* width */
@@ -69,7 +70,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .container{
     margin: 0 auto;
-    width: 512px;
+    width: 712px;
     background-color: var(--even-lighter-blue);
     box-shadow: inset 0px 0px 0px 4px #90F3E1, inset 0px 0px 0px 6px #4D23CD, 4px 4px #4e23cd48;
     border: 2px solid #4D23CD;
@@ -101,7 +102,7 @@ div[itemprop="Paint"]:before {
     letter-spacing: 0.045em;
 }
 
-.formas{
+.formas {
     position: relative;
     float: left;
 }
@@ -155,4 +156,40 @@ div[itemprop="Paint"]:before {
     border: solid 4px #4D23CD;
     opacity: 0.5;
     cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+}
+.config{
+    position:relative;
+    margin: 0 auto;
+    float: right;
+    width: 224px;
+    background-color: var(--even-lighter-blue);
+    box-shadow: inset 0px 0px 0px 4px #90F3E1, inset 0px 0px 0px 6px #4D23CD, 4px 4px #4e23cd48;
+    border: 1px solid #4D23CD;
+    height: fit-content;
+    text-align: center;
+}
+.config::before{
+    display: block;
+    padding: 8px;
+    padding-left: 12px;
+    background-color: #EFCFEF;
+    box-shadow: inset 0px 0px 0px 4px #90F3E1, inset 0px 0px 0px 6px #4D23CD;
+    border-bottom: 2px solid #4D23CD;
+    color: #4D21CB;
+    background-image: url(https://external-media.spacehey.net/media/s38zZmGIizgADY3spcLBnWdlWH5o3cz5DhdEOQIiWOhU=/https://files.catbox.moe/ql6gqv.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    padding-right: 12px;
+    font-weight: 400;
+    content: "Settings";
+    font-size: 18px;
+    text-align: left;
+}
+.datos{
+    margin: 0 auto;
+    background-color: white;
+    border:3px solid var(--darker-blue);
+    width: 200px;
+    height: 500px;
+    margin-bottom: 5px;
 }

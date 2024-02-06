@@ -34,6 +34,12 @@
             </div>
             <a onclick="event.preventDefault();">circle</a>
         </div>
+        <div class="icon" id="polybtn">
+            <div class="form-box">
+                <div class="cuadrado">n</div>   
+            </div>
+            <a onclick="event.preventDefault();">Polygon</a>
+        </div>
     </span>
     <div class="container" itemprop="Paint"  >
         <canvas id="myCanvas" width="700" height="500" style="border:1px solid #000;" class="ctx"></canvas>
@@ -48,7 +54,7 @@
                 <label for="">width</label>
                 <input type="number" id="grosor" value="1" min="1" max="100">
             </div>
-            <div style="padding: 5px; visibility: hidden;"  id="sidesbox">
+            <div id="sidefilter" style="padding: 5px; visibility: hidden;"  id="sidesbox">
                 <label for="">sides</label>
                 <input type="number" id="sides" value="1" min="1" max="100">
             </div>

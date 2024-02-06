@@ -4,29 +4,45 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const basecolorInput = document.getElementById("color");
     var color = basecolorInput.value;
-
+    
     const basewidthInput = document.getElementById("grosor");
     var grosor = basewidthInput.value;
+
+    const sidefilter = document.getElementById("sidefilter");
+    var sidenum = document.getElementById("sides").value;
 
     let isDrawing = false;
     let x1, y1;
     let selectedMode = null;
 
     document.getElementById("lineaBtn").addEventListener("click", function() {
+        sidefilter.style.visibility = "hidden";
         selectedMode = "linea";
     });
 
     document.getElementById("sqrBtn").addEventListener("click", function() {
+        sidefilter.style.visibility = "hidden";
         selectedMode = "sqr";
     });
 
     document.getElementById("rectBtn").addEventListener("click", function() {
+        sidefilter.style.visibility = "hidden";
         selectedMode = "rect";
     });
     
     document.getElementById("circleBtn").addEventListener("click", function() {
+        sidefilter.style.visibility = "hidden";
         selectedMode = "circle";
     });
+    this.getElementById("polybtn").addEventListener("click", function() {
+        sidefilter.style.visibility = "visible";
+        selectedMode = "poly";
+
+    });
+    this.getElementById("sides").addEventListener("change", function() {
+        sidenum = document.getElementById("sides").value;
+    });
+    
 
     basecolorInput.addEventListener("change", function() {
         const colorInput = document.getElementById("color");
@@ -64,6 +80,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     case "circle":
                         const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
                         circleBres(x1, y1, r, ctx);
+                        break;
+                    case "poly":   
+                        drawPolygon(x1, y1, sidenum, ctx, color, grosor, x2, y2);
                         break;    
                     default:
                         break;
@@ -188,3 +207,21 @@ function circleBres(xc, yc, r, ctx) {
         Circle(xc, yc, x, y, ctx);
     }
 }
+function drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2) {
+    const centerX = x1;
+    const centerY = y1;
+    const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+    const angle = (2 * Math.PI) / sides;
+    
+    for (let i = 0; i < sides; i++) {
+        const startX = centerX + radius * Math.cos(i * angle);
+        const startY = centerY + radius * Math.sin(i * angle);
+
+        const endX = centerX + radius * Math.cos((i + 1) * angle);
+        const endY = centerY + radius * Math.sin((i + 1) * angle);
+
+        dda(startX, startY, endX, endY, ctx, color, grosor);
+    }
+}
+

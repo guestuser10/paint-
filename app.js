@@ -39,6 +39,10 @@ document.addEventListener("DOMContentLoaded", function() {
         selectedMode = "poly";
 
     });
+    this.getElementById("ovalBtn").addEventListener("click", function() {
+        selectedMode = "ova";
+
+    });
     this.getElementById("sides").addEventListener("change", function() {
         sidenum = document.getElementById("sides").value;
     });
@@ -79,10 +83,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         break;
                     case "circle":
                         const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                        circleBres(x1, y1, r, ctx);
+                        circleBres(x1, y1, r, ctx, color, grosor);
                         break;
                     case "poly":   
                         drawPolygon(x1, y1, sidenum, ctx, color, grosor, x2, y2);
+                        break;
+                    case "ova":   
+                        oval(x1, y1, x2, y2, ctx, color, grosor);
                         break;    
                     default:
                         break;
@@ -176,23 +183,24 @@ function rectangle(x, y, x2, y2, ctx , color, grosor) {
     dda(x, y1, x, y, ctx, color, grosor); 
 }
 // circle
-function Circle(xc, yc, x, y, ctx) {
-    ctx.fillRect(xc + x, yc + y, 1, 1);
-    ctx.fillRect(xc - x, yc + y, 1, 1);
-    ctx.fillRect(xc + x, yc - y, 1, 1);
-    ctx.fillRect(xc - x, yc - y, 1, 1);
-    ctx.fillRect(xc + y, yc + x, 1, 1);
-    ctx.fillRect(xc - y, yc + x, 1, 1);
-    ctx.fillRect(xc + y, yc - x, 1, 1);
-    ctx.fillRect(xc - y, yc - x, 1, 1);
+function Circle(xc, yc, x, y, ctx, color, grosor) {
+    ctx.fillStyle = color;
+    ctx.fillRect(xc + x, yc + y, grosor, grosor);
+    ctx.fillRect(xc - x, yc + y, grosor, grosor);
+    ctx.fillRect(xc + x, yc - y, grosor, grosor);
+    ctx.fillRect(xc - x, yc - y, grosor, grosor);
+    ctx.fillRect(xc + y, yc + x, grosor, grosor);
+    ctx.fillRect(xc - y, yc + x, grosor, grosor);
+    ctx.fillRect(xc + y, yc - x, grosor, grosor);
+    ctx.fillRect(xc - y, yc - x, grosor, grosor);
 }
 
-function circleBres(xc, yc, r, ctx) {
+function circleBres(xc, yc, r, ctx, color, grosor) {
     let x = 0;
     let y = r;
     let d = 3 - 2 * r;
     
-    Circle(xc, yc, x, y, ctx);
+    Circle(xc, yc, x, y, ctx, color, grosor);
     
     while (y >= x) {
         x++;
@@ -204,7 +212,7 @@ function circleBres(xc, yc, r, ctx) {
             d = d + 4 * x + 6;
         }
         
-        Circle(xc, yc, x, y, ctx);
+        Circle(xc, yc, x, y, ctx, color, grosor);
     }
 }
 function drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2) {
@@ -224,4 +232,51 @@ function drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2) {
         dda(startX, startY, endX, endY, ctx, color, grosor);
     }
 }
+function oval(x1, y1, x2, y2,ctx, color, grosor) {
+    ctx.fillStyle = color;
+    let a = Math.abs(x2 - x1);
+    let b = Math.abs(y2 - y1);
+    let b1 = b & 1;
+    let dx = 4 * (1 - a) * b * b;
+    let dy = 4 * (b1 + 1) * a * a;
+    let err = dx + dy + b1 * a * a;
+    let e2;
 
+    let aTimes8 = 8 * a;
+    let b1Times8 = 8 * b * b;
+
+    [x1, x2] = x1 > x2 ? [x2, x2 + a] : [x1, x2];
+    y1 = Math.min(y1, y2);
+
+    y1 += (b + 1) / 2;
+    y2 = y1 - b1;
+    aTimes8 = 8 * a;
+    b1Times8 = 8 * b * b;
+
+    do {
+        ctx.fillRect(x2, y1, grosor,grosor);
+        ctx.fillRect(x1, y1, grosor,grosor);
+        ctx.fillRect(x1, y2, grosor,grosor);
+        ctx.fillRect(x2, y2, grosor,grosor);
+        e2 = 2 * err;
+
+        if (e2 <= dy) {
+            y1++;
+            y2--;
+            err += dy += aTimes8;
+        }
+
+        if (e2 >= dx || 2 * err > dy) {
+            x1++;
+            x2--;
+            err += dx += b1Times8;
+        }
+    } while (x1 <= x2);
+
+    while (y1 - y2 < b) {
+        ctx.fillRect(x1 - 1, y1, grosor,grosor);
+        ctx.fillRect(x2 + 1, y1++, grosor,grosor);
+        ctx.fillRect(x1 - 1, y2, grosor,grosor);
+        ctx.fillRect(x2 + 1, y2--, grosor,grosor);
+    }
+}

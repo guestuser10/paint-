@@ -157,6 +157,15 @@ div[itemprop="Paint"]:before {
     opacity: 0.5;
     cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
 }
+.oval{
+    margin: 5px auto;
+    width: 30%;
+    height: 50%;
+    border-radius: 50%;
+    border: solid 4px #4D23CD;  
+    opacity: 0.5;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+}
 .config{
     position:relative;
     margin: 0 auto;

@@ -80,7 +80,7 @@ h1, h2, h3, h4, h5, h6 {
 .ctx{
     background-color: white;
     border:3px solid var(--darker-blue);
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202772597306032178/nso_handwriting.png?ex=65ceac45&is=65bc3745&hm=80f1d9396a2fe4bc2da2dcfe584f961f8cadc7672fd98b70175e5cdd9373d6bb&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202772597306032178/nso_handwriting.png?ex=65ea5bc5&is=65d7e6c5&hm=1e8a08d8d87c7cea82ee8395367f2f4952eb7ab0a7f7ab85d06483053414980b&), auto;
 }
 
 div[itemprop="Paint"]:before {
@@ -112,7 +112,7 @@ div[itemprop="Paint"]:before {
     height: 4rem;
     text-align: center;
     background-color: transparent;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
     margin: 1rem;
 }
 .form-box{
@@ -121,7 +121,7 @@ div[itemprop="Paint"]:before {
     width: 60%;
     height: 60%;
     background-color: transparent;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
 .linea {
     margin: 5px auto;
@@ -130,7 +130,7 @@ div[itemprop="Paint"]:before {
     transform: rotate(45deg);
     background-color: #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
 .cuadrado{
     margin: 5px auto;
@@ -138,7 +138,7 @@ div[itemprop="Paint"]:before {
     height: 50%;
     border: solid 4px #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
 .rectangle{
     margin: 5px auto;
@@ -146,7 +146,7 @@ div[itemprop="Paint"]:before {
     height: 40%;
     border: solid 4px #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
 .circle{
     margin: 5px auto;
@@ -155,7 +155,7 @@ div[itemprop="Paint"]:before {
     border-radius: 50%;
     border: solid 4px #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
 .oval{
     margin: 5px auto;
@@ -164,7 +164,7 @@ div[itemprop="Paint"]:before {
     border-radius: 50%;
     border: solid 4px #4D23CD;  
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ceaa11&is=65bc3511&hm=e6cd59e5fd1e414d75d684c0ada9479f6c7aa1cdb7ff3418b6352c83b47a159b&), auto;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
 .config{
     position:relative;
@@ -201,4 +201,11 @@ div[itemprop="Paint"]:before {
     width: 200px;
     height: 500px;
     margin-bottom: 5px;
+}
+miniicon{
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+}
+.picbtn{
+    width: 22px;margin: 1 rem;
+    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }

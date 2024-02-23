@@ -1,10 +1,10 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
     const basecolorInput = document.getElementById("color");
     var color = basecolorInput.value;
-    
+
     const basewidthInput = document.getElementById("grosor");
     var grosor = basewidthInput.value;
 
@@ -15,88 +15,126 @@ document.addEventListener("DOMContentLoaded", function() {
     let x1, y1;
     let selectedMode = null;
 
-    document.getElementById("lineaBtn").addEventListener("click", function() {
+    let history = [];
+
+
+    document.getElementById("lineaBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "linea";
     });
 
-    document.getElementById("sqrBtn").addEventListener("click", function() {
+    document.getElementById("sqrBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "sqr";
     });
 
-    document.getElementById("rectBtn").addEventListener("click", function() {
+    document.getElementById("rectBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "rect";
     });
-    
-    document.getElementById("circleBtn").addEventListener("click", function() {
+
+    document.getElementById("circleBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "circle";
     });
-    this.getElementById("polybtn").addEventListener("click", function() {
+
+    this.getElementById("polybtn").addEventListener("click", function () {
         sidefilter.style.visibility = "visible";
         selectedMode = "poly";
-
     });
-    this.getElementById("ovalBtn").addEventListener("click", function() {
+
+    this.getElementById("ovalBtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
         selectedMode = "ova";
-
     });
-    this.getElementById("sides").addEventListener("change", function() {
+
+    this.getElementById("sides").addEventListener("change", function () {
         sidenum = document.getElementById("sides").value;
     });
-    
 
-    basecolorInput.addEventListener("change", function() {
+    basecolorInput.addEventListener("change", function () {
         const colorInput = document.getElementById("color");
         color = colorInput.value;
     });
-    basewidthInput.addEventListener("change", function() {
+
+    basewidthInput.addEventListener("change", function () {
         const widthInput = document.getElementById("grosor");
         grosor = widthInput.value;
     });
 
+    canvas.addEventListener("mousedown", function (event) {
+        isDrawing = true;
+        const rect = canvas.getBoundingClientRect();
+        x1 = Math.round(event.clientX - rect.left);
+        y1 = Math.round(event.clientY - rect.top);
+    });
 
-    canvas.addEventListener("click", function(event) {
-        if (selectedMode) {
-            if (!isDrawing) {
-                isDrawing = true;
-                const rect = canvas.getBoundingClientRect();
-                x1 = Math.round(event.clientX - rect.left);
-                y1 = Math.round(event.clientY - rect.top);
-            } else {
-                isDrawing = false;
-                const rect = canvas.getBoundingClientRect();
-                const x2 = Math.round(event.clientX - rect.left);
-                const y2 = Math.round(event.clientY - rect.top);
+    canvas.addEventListener("mouseup", function (event) {
+        if (isDrawing) {
+            isDrawing = false;
+            const rect = canvas.getBoundingClientRect();
+            const x2 = Math.round(event.clientX - rect.left);
+            const y2 = Math.round(event.clientY - rect.top);
 
-                switch (selectedMode) {
-                    case "linea":
-                        dda(x1, y1, x2, y2, ctx, color, grosor);
-                        break;
-                    case "sqr":
-                        scuer(x1, y1, x2, y2, ctx, color, grosor);
-                        break;
-                    case "rect":
-                        rectangle(x1, y1, x2, y2, ctx, color, grosor);
-                        break;
-                    case "circle":
-                        const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                        circleBres(x1, y1, r, ctx, color, grosor);
-                        break;
-                    case "poly":   
-                        drawPolygon(x1, y1, sidenum, ctx, color, grosor, x2, y2);
-                        break;
-                    case "ova":   
-                        oval(x1, y1, x2, y2, ctx, color, grosor);
-                        break;    
-                    default:
-                        break;
-                }
+            switch (selectedMode) {
+                case "linea":
+                    history.push({ type: "linea", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    printHistory();
+                    break;
+                case "sqr":
+                    history.push({ type: "sqr", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    printHistory();
+                    break;
+                case "rect":
+                    history.push({ type: "rect", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor  });
+                    printHistory();
+                    break;
+                case "circle":
+                    const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    history.push({ type: "circle", x: x1, y: y1, r: r, color: color, grosor: grosor});
+                    printHistory();
+                    break;
+                case "poly":
+                    history.push({ type: "poly", x1: x1, y1: y1, sides: sidenum, x2: x2, y2: y2, color: color, grosor: grosor });
+                    printHistory();
+                    break;
+                case "ova":
+                    history.push({ type: "ova", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    printHistory();
+                    break;
+                default:
+                    break;
             }
         }
     });
+    //print history
+    function printHistory() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (const draw of history) {
+            switch (draw.type) {
+                case "linea":
+                    dda(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
+                    break;
+                case "sqr":
+                    scuer(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
+                    break;
+                case "rect":
+                    rectangle(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
+                    break;
+                case "circle":
+                    circleBres(draw.x, draw.y, draw.r, ctx, draw.color, draw.grosor);
+                    break;
+                case "poly":
+                    drawPolygon(draw.x1, draw.y1, draw.sides, ctx, draw.color, draw.grosor, draw.x2, draw.y2);
+                    break;
+                case "ova":
+                    oval(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
+                    break;
+                default:
+                    break;
+            }
+        }
+    } 
 });
 
 //liena

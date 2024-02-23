@@ -57,6 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
             printHistory();
         }
     });
+
+    document.getElementById("clr_Btn").addEventListener("click", function () {
+        clearCanvas(ctx, canvas);
+        history = [];
+        currentDraw = [];
+        historyIndex = -1;
+    });
+    
     
     document.getElementById("re_Btn").addEventListener("click", function () {
         if (historyIndex < history.length - 1) {
@@ -134,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     //print history
     function printHistory() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
+        clearCanvas(ctx, canvas);
         for (let i = 0; i <= historyIndex; i++) {
             const draw = history[i];
             switch (draw.type) {
@@ -343,4 +351,7 @@ function oval(x1, y1, x2, y2,ctx, color, grosor) {
         ctx.fillRect(x1 - 1, y2, grosor,grosor);
         ctx.fillRect(x2 + 1, y2--, grosor,grosor);
     }
+}
+function clearCanvas(ctx, canvas) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }

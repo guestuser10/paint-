@@ -16,6 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedMode = null;
 
     let history = [];
+    
+    let currentDraw = [];
+    let historyIndex = -1;
 
 
     document.getElementById("lineaBtn").addEventListener("click", function () {
@@ -48,6 +51,20 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedMode = "ova";
     });
 
+    document.getElementById("un_Btn").addEventListener("click", function () {
+        if (historyIndex > 0) {
+            historyIndex--;
+            printHistory();
+        }
+    });
+    
+    document.getElementById("re_Btn").addEventListener("click", function () {
+        if (historyIndex < history.length - 1) {
+            historyIndex++;
+            printHistory();
+        }
+    });
+
     this.getElementById("sides").addEventListener("change", function () {
         sidenum = document.getElementById("sides").value;
     });
@@ -78,39 +95,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
             switch (selectedMode) {
                 case "linea":
-                    history.push({ type: "linea", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    printHistory();
+                    currentDraw.push({ type: "linea", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
                     break;
                 case "sqr":
-                    history.push({ type: "sqr", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    printHistory();
+                    currentDraw.push({ type: "sqr", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
                     break;
                 case "rect":
-                    history.push({ type: "rect", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor  });
-                    printHistory();
+                    currentDraw.push({ type: "rect", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor  });
+                    
                     break;
                 case "circle":
                     const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                    history.push({ type: "circle", x: x1, y: y1, r: r, color: color, grosor: grosor});
-                    printHistory();
+                    currentDraw.push({ type: "circle", x: x1, y: y1, r: r, color: color, grosor: grosor});
+                    
                     break;
                 case "poly":
-                    history.push({ type: "poly", x1: x1, y1: y1, sides: sidenum, x2: x2, y2: y2, color: color, grosor: grosor });
-                    printHistory();
+                    currentDraw.push({ type: "poly", x1: x1, y1: y1, sides: sidenum, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
                     break;
                 case "ova":
-                    history.push({ type: "ova", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    printHistory();
+                    currentDraw.push({ type: "ova", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
                     break;
                 default:
                     break;
+            }
+            if (currentDraw.length > 0) {
+                history.splice(historyIndex + 1); // Elimina los elementos después de la posición actual en el historial
+                history.push(...currentDraw);
+                historyIndex = history.length - 1;
+    
+                printHistory();
+                currentDraw = [];
             }
         }
     });
     //print history
     function printHistory() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (const draw of history) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
+        for (let i = 0; i <= historyIndex; i++) {
+            const draw = history[i];
             switch (draw.type) {
                 case "linea":
                     dda(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
@@ -134,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     break;
             }
         }
-    } 
+    }    
 });
 
 //liena

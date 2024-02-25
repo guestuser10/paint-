@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isDrawing = false;
     let x1, y1;
+    let tempX2, tempY2;
     let selectedMode = null;
 
     let history = [];
@@ -92,8 +93,22 @@ document.addEventListener("DOMContentLoaded", function () {
         const rect = canvas.getBoundingClientRect();
         x1 = Math.round(event.clientX - rect.left);
         y1 = Math.round(event.clientY - rect.top);
+        tempX2 = x1;
+        tempY2 = y1;
     });
-
+    
+    canvas.addEventListener("mousemove", function (event) {
+        if (isDrawing) {
+            const rect = canvas.getBoundingClientRect();
+            tempX2 = Math.round(event.clientX - rect.left);
+            tempY2 = Math.round(event.clientY - rect.top);
+    
+            // Limpiar el lienzo y dibujar la previsualización
+            printHistory();
+            drawPreview();
+        }
+    });
+    
     canvas.addEventListener("mouseup", function (event) {
         if (isDrawing) {
             isDrawing = false;
@@ -140,6 +155,33 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     });
+
+    function drawPreview() {
+        switch (selectedMode) {
+            case "linea":
+                dda(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                break;
+            case "sqr":
+                scuer(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                break;
+            case "rect":
+                rectangle(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                break;
+            case "circle":
+                const r = Math.sqrt(Math.pow(tempX2 - x1, 2) + Math.pow(tempY2 - y1, 2));
+                circleBres(x1, y1, r, ctx, color, grosor);
+                break;
+            case "poly":
+                drawPolygon(x1, y1, sidenum, ctx, color, grosor, tempX2, tempY2);
+                break;
+            case "ova":
+                oval(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                break;
+            default:
+                break;
+        }
+    }
+
     //print history
     function printHistory() {
         clearCanvas(ctx, canvas);

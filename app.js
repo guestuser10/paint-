@@ -156,6 +156,79 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // touch events
+    
+    canvas.addEventListener("touchstart", function (event) {
+        isDrawing = true;
+        const touch = event.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        x1 = Math.round(touch.clientX - rect.left);
+        y1 = Math.round(touch.clientY - rect.top);
+        tempX2 = x1;
+        tempY2 = y1;
+    });
+    
+    canvas.addEventListener("touchmove", function (event) {
+        if (isDrawing) {
+            const touch = event.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            tempX2 = Math.round(touch.clientX - rect.left);
+            tempY2 = Math.round(touch.clientY - rect.top);
+    
+            // Limpiar el lienzo y dibujar la previsualización
+            printHistory();
+            drawPreview();
+        }
+    });
+    
+    canvas.addEventListener("touchend", function (event) {
+        if (isDrawing) {
+            isDrawing = false;
+            const touch = event.changedTouches[0];
+            const rect = canvas.getBoundingClientRect()
+            const x2 = Math.round(touch.clientX - rect.left);
+            const y2 = Math.round(touch.clientY - rect.top);
+
+            switch (selectedMode) {
+                case "linea":
+                    currentDraw.push({ type: "linea", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
+                    break;
+                case "sqr":
+                    currentDraw.push({ type: "sqr", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
+                    break;
+                case "rect":
+                    currentDraw.push({ type: "rect", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor  });
+                    
+                    break;
+                case "circle":
+                    const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    currentDraw.push({ type: "circle", x: x1, y: y1, r: r, color: color, grosor: grosor});
+                    
+                    break;
+                case "poly":
+                    currentDraw.push({ type: "poly", x1: x1, y1: y1, sides: sidenum, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
+                    break;
+                case "ova":
+                    currentDraw.push({ type: "ova", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
+                    
+                    break;
+                default:
+                    break;
+            }
+            if (currentDraw.length > 0) {
+                history.splice(historyIndex + 1); // Elimina los elementos después de la posición actual en el historial
+                history.push(...currentDraw);
+                historyIndex = history.length - 1;
+    
+                printHistory();
+                currentDraw = [];
+            }
+        }
+    });
+
     function drawPreview() {
         switch (selectedMode) {
             case "linea":

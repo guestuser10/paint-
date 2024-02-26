@@ -88,204 +88,122 @@ document.addEventListener("DOMContentLoaded", function () {
         grosor = widthInput.value;
     });
 
-    canvas.addEventListener("mousedown", function (event) {
-        isDrawing = true;
+    function getCoordinates(event) {
         const rect = canvas.getBoundingClientRect();
-        x1 = Math.round(event.clientX - rect.left);
-        y1 = Math.round(event.clientY - rect.top);
+        const x = Math.round(event.clientX - rect.left);
+        const y = Math.round(event.clientY - rect.top);
+        return { x, y };
+    }
+
+    function startDrawing(event) {
+        isDrawing = true;
+        const { x, y } = getCoordinates(event);
+        x1 = x;
+        y1 = y;
         tempX2 = x1;
         tempY2 = y1;
-    });
-    
-    canvas.addEventListener("mousemove", function (event) {
-        if (isDrawing) {
-            const rect = canvas.getBoundingClientRect();
-            tempX2 = Math.round(event.clientX - rect.left);
-            tempY2 = Math.round(event.clientY - rect.top);
-    
-            // Limpiar el lienzo y dibujar la previsualización
-            printHistory();
-            drawPreview();
-        }
-    });
-    
-    canvas.addEventListener("mouseup", function (event) {
-        if (isDrawing) {
-            isDrawing = false;
-            const rect = canvas.getBoundingClientRect();
-            const x2 = Math.round(event.clientX - rect.left);
-            const y2 = Math.round(event.clientY - rect.top);
+    }
 
-            switch (selectedMode) {
-                case "linea":
-                    currentDraw.push({ type: "linea", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                case "sqr":
-                    currentDraw.push({ type: "sqr", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                case "rect":
-                    currentDraw.push({ type: "rect", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor  });
-                    
-                    break;
-                case "circle":
-                    const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                    currentDraw.push({ type: "circle", x: x1, y: y1, r: r, color: color, grosor: grosor});
-                    
-                    break;
-                case "poly":
-                    currentDraw.push({ type: "poly", x1: x1, y1: y1, sides: sidenum, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                case "ova":
-                    currentDraw.push({ type: "ova", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                default:
-                    break;
-            }
-            if (currentDraw.length > 0) {
-                history.splice(historyIndex + 1); // Elimina los elementos después de la posición actual en el historial
-                history.push(...currentDraw);
-                historyIndex = history.length - 1;
-    
-                printHistory();
-                currentDraw = [];
-            }
-        }
-    });
+    function draw(event) {
+        if (!isDrawing) return;
+        const { x, y } = getCoordinates(event);
+        tempX2 = x;
+        tempY2 = y;
 
-    // touch events
-    
-    canvas.addEventListener("touchstart", function (event) {
-        isDrawing = true;
-        const touch = event.touches[0];
-        const rect = canvas.getBoundingClientRect();
-        x1 = Math.round(touch.clientX - rect.left);
-        y1 = Math.round(touch.clientY - rect.top);
-        tempX2 = x1;
-        tempY2 = y1;
-    });
-    
-    canvas.addEventListener("touchmove", function (event) {
-        if (isDrawing) {
-            const touch = event.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            tempX2 = Math.round(touch.clientX - rect.left);
-            tempY2 = Math.round(touch.clientY - rect.top);
-    
-            // Limpiar el lienzo y dibujar la previsualización
-            printHistory();
-            drawPreview();
-        }
-    });
-    
-    canvas.addEventListener("touchend", function (event) {
-        if (isDrawing) {
-            isDrawing = false;
-            const touch = event.changedTouches[0];
-            const rect = canvas.getBoundingClientRect()
-            const x2 = Math.round(touch.clientX - rect.left);
-            const y2 = Math.round(touch.clientY - rect.top);
+        // Limpiar el lienzo y dibujar la previsualización
+        printHistory();
+        drawPreview();
+    }
 
-            switch (selectedMode) {
-                case "linea":
-                    currentDraw.push({ type: "linea", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                case "sqr":
-                    currentDraw.push({ type: "sqr", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                case "rect":
-                    currentDraw.push({ type: "rect", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor  });
-                    
-                    break;
-                case "circle":
-                    const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                    currentDraw.push({ type: "circle", x: x1, y: y1, r: r, color: color, grosor: grosor});
-                    
-                    break;
-                case "poly":
-                    currentDraw.push({ type: "poly", x1: x1, y1: y1, sides: sidenum, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                case "ova":
-                    currentDraw.push({ type: "ova", x1: x1, y1: y1, x2: x2, y2: y2, color: color, grosor: grosor });
-                    
-                    break;
-                default:
-                    break;
-            }
-            if (currentDraw.length > 0) {
-                history.splice(historyIndex + 1); // Elimina los elementos después de la posición actual en el historial
-                history.push(...currentDraw);
-                historyIndex = history.length - 1;
-    
-                printHistory();
-                currentDraw = [];
-            }
-        }
-    });
+    function stopDrawing(event) {
+        if (!isDrawing) return;
+        isDrawing = false;
+        const { x: x2, y: y2 } = getCoordinates(event);
 
-    function drawPreview() {
+        const shape = { x1, y1, x2, y2, color, grosor, sides};
         switch (selectedMode) {
             case "linea":
-                dda(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                currentDraw.push({ ...shape, sides: 2, type: "linea" });
                 break;
             case "sqr":
-                scuer(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                currentDraw.push({ ...shape, sides: 4, type: "sqr" });
                 break;
             case "rect":
-                rectangle(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                currentDraw.push({ ...shape, sides: 4, type: "rect" });
                 break;
             case "circle":
-                const r = Math.sqrt(Math.pow(tempX2 - x1, 2) + Math.pow(tempY2 - y1, 2));
+                const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                currentDraw.push({ ...shape, sides: 1, type: "circle", r });
+                break;
+            case "poly":
+                currentDraw.push({ ...shape, type: "poly", sides: sidenum });
+                break;
+            case "ova":
+                currentDraw.push({ ...shape, sides: 1, type: "ova" });
+                break;
+            default:
+                break;
+        }
+        if (currentDraw.length > 0) {
+            history.splice(historyIndex + 1); // Elimina los elementos después de la posición actual en el historial
+            history.push(...currentDraw);
+            historyIndex = history.length - 1;
+
+            printHistory();
+            currentDraw = [];
+        }
+    }
+
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mouseup", stopDrawing);
+
+    canvas.addEventListener("touchstart", (event) => startDrawing(event.touches[0]));
+    canvas.addEventListener("touchmove", (event) => draw(event.touches[0]));
+    canvas.addEventListener("touchend", (event) => stopDrawing(event.changedTouches[0]));
+
+    function drawShape(shape, ctx, color, grosor, x1, y1, x2, y2, sides) {
+        switch (shape) {
+            case "linea":
+                dda(x1, y1, x2, y2, ctx, color, grosor);
+                break;
+            case "sqr":
+                scuer(x1, y1, x2, y2, ctx, color, grosor);
+                break;
+            case "rect":
+                rectangle(x1, y1, x2, y2, ctx, color, grosor);
+                break;
+            case "circle":
+                const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
                 circleBres(x1, y1, r, ctx, color, grosor);
                 break;
             case "poly":
-                drawPolygon(x1, y1, sidenum, ctx, color, grosor, tempX2, tempY2);
+                drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2);
                 break;
             case "ova":
-                oval(x1, y1, tempX2, tempY2, ctx, color, grosor);
+                oval(x1, y1, x2, y2, ctx, color, grosor);
                 break;
             default:
                 break;
         }
     }
 
-    //print history
+    function drawPreview() {
+        if (selectedMode === "poly") {
+            drawPolygon(x1, y1, sidenum, ctx, color, grosor, tempX2, tempY2);
+        } else {
+            drawShape(selectedMode, ctx, color, grosor, x1, y1, tempX2, tempY2);
+        }
+    }
+
     function printHistory() {
         clearCanvas(ctx, canvas);
         for (let i = 0; i <= historyIndex; i++) {
             const draw = history[i];
-            switch (draw.type) {
-                case "linea":
-                    dda(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
-                    break;
-                case "sqr":
-                    scuer(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
-                    break;
-                case "rect":
-                    rectangle(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
-                    break;
-                case "circle":
-                    circleBres(draw.x, draw.y, draw.r, ctx, draw.color, draw.grosor);
-                    break;
-                case "poly":
-                    drawPolygon(draw.x1, draw.y1, draw.sides, ctx, draw.color, draw.grosor, draw.x2, draw.y2);
-                    break;
-                case "ova":
-                    oval(draw.x1, draw.y1, draw.x2, draw.y2, ctx, draw.color, draw.grosor);
-                    break;
-                default:
-                    break;
-            }
+            drawShape(draw.type, ctx, draw.color, draw.grosor, draw.x1, draw.y1, draw.x2, draw.y2, draw.sides);
         }
-    }    
+    }
 });
-
 //liena
 function bresenham(x1, y1, x2, y2, ctx) {
     const dx = Math.abs(x2 - x1);
@@ -348,7 +266,7 @@ function scuer(x, y, x2, y2, ctx, color, grosor) {
     let x1 = x + length * xSign;
     let y1 = y + length * ySign;
 
-    dda(x, y, x1, y, ctx , color, grosor);
+    dda(x, y, x1, y, ctx, color, grosor);
     dda(x1, y, x1, y1, ctx, color, grosor);
     dda(x1, y1, x, y1, ctx, color, grosor);
     dda(x, y1, x, y, ctx, color, grosor);

@@ -30,7 +30,6 @@ function bresenham(x1, y1, x2, y2, ctx) {
 
 function dda(x, y, x2, y2, ctx, color, width) {
     ctx.linewidth = width;
-    console.log(width)
     ctx.fillStyle = color;
     const dx = x2 - x;
     const dy = y2 - y;

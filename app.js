@@ -56,7 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("moveBtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
         selectedMode = "move";
+    });
+    document.getElementById("resizeBtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "resize";
     });
 
     document.getElementById("un_Btn").addEventListener("click", function () {
@@ -108,6 +113,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Selecciona la forma en las coordenadas del evento
             selectedShape = selectShape(x, y);
             isMoving = true;
+        } else if (selectedMode === "resize"){
+            selectedShape = selectShape(x, y);
+            isMoving = true;
         } else {
             isDrawing = true;
             x1 = x;
@@ -121,10 +129,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const { x, y } = getCoordinates(event);
         if (selectedMode === "move" && isMoving && selectedShape) {
             // Mueve la forma seleccionada a las coordenadas del evento
+            console.log("move");
             moveShape(selectedShape, x, y);
             printHistory();
             drawPreview();
-        } else if (isDrawing) {
+        } else  if (selectedMode === "resize" && isMoving && selectedShape) {
+            // Mueve la forma seleccionada a las coordenadas del evento
+            rezsshape(selectedShape, x, y);
+            printHistory();
+            drawPreview();
+        }else if (isDrawing) {
             tempX2 = x;
             tempY2 = y;
             printHistory();
@@ -136,7 +150,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedMode === "move" && isMoving) {
             // Finaliza el movimiento de la forma
             isMoving = false;
-        } else if (isDrawing) {
+        }  else if (selectedMode === "resize" && isMoving) {
+            // Finaliza el movimiento de la forma
+            isMoving = false;
+        }else if (isDrawing) {
             isDrawing = false;
             const { x: x2, y: y2 } = getCoordinates(event);
             const shape = { x1, y1, x2, y2, color, grosor, sides};
@@ -243,6 +260,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const dy = y - shape.y1;
         shape.x1 += dx;
         shape.y1 += dy;
+        shape.x2 += dx;
+        shape.y2 += dy;
+
+        // Si la forma es un polígono, actualiza las coordenadas de los puntos
+        if (shape.type === "poly") {
+            for (let i = 0; i < shape.points.length; i++) {
+                shape.points[i].x += dx;
+                shape.points[i].y += dy;
+            }
+        }
+    }
+    function rezsshape(shape, x, y) {
+        // Factor de escala para hacer el cambio de tamaño menos sensible
+        const scaleFactor = 0.1;
+
+        // Calcula la diferencia entre las nuevas coordenadas del mouse y las coordenadas actuales de la esquina inferior derecha de la figura
+        const dx = (x - shape.x2) * scaleFactor;
+        const dy = (y - shape.y2) * scaleFactor;
+
+        // Actualiza las coordenadas de la forma
         shape.x2 += dx;
         shape.y2 += dy;
 

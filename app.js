@@ -109,89 +109,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function startDrawing(event) {
         const { x, y } = getCoordinates(event);
-        if (selectedMode === "move") {
-            // Selecciona la forma en las coordenadas del evento
-            selectedShape = selectShape(x, y);
-            isMoving = true;
-        } else if (selectedMode === "resize"){
+        if (["move", "resize"].includes(selectedMode)) {
             selectedShape = selectShape(x, y);
             isMoving = true;
         } else {
             isDrawing = true;
-            x1 = x;
-            y1 = y;
-            tempX2 = x1;
-            tempY2 = y1;
+            [x1, y1, tempX2, tempY2] = [x, y, x, y];
         }
     }
 
     function draw(event) {
         const { x, y } = getCoordinates(event);
-        if (selectedMode === "move" && isMoving && selectedShape) {
-            // Mueve la forma seleccionada a las coordenadas del evento
-            console.log("move");
-            moveShape(selectedShape, x, y);
+        if (isMoving && selectedShape) {
+            if (selectedMode === "move") {
+                moveShape(selectedShape, x, y);
+            } else if (selectedMode === "resize") {
+                resizeShape(selectedShape, x, y);
+            }
             printHistory();
             drawPreview();
-        } else  if (selectedMode === "resize" && isMoving && selectedShape) {
-            // Mueve la forma seleccionada a las coordenadas del evento
-            rezsshape(selectedShape, x, y);
-            printHistory();
-            drawPreview();
-        }else if (isDrawing) {
-            tempX2 = x;
-            tempY2 = y;
+        } else if (isDrawing) {
+            [tempX2, tempY2] = [x, y];
             printHistory();
             drawPreview();
         }
     }
 
     function stopDrawing(event) {
-        if (selectedMode === "move" && isMoving) {
-            // Finaliza el movimiento de la forma
+        if (isMoving) {
             isMoving = false;
-        }  else if (selectedMode === "resize" && isMoving) {
-            // Finaliza el movimiento de la forma
-            isMoving = false;
-        }else if (isDrawing) {
+        } else if (isDrawing) {
             isDrawing = false;
             const { x: x2, y: y2 } = getCoordinates(event);
-            const shape = { x1, y1, x2, y2, color, grosor, sides};
-            switch (selectedMode) {
-                case "linea":
-                    currentDraw.push({ ...shape, sides: 2, type: "linea" });
-                    break;
-                case "sqr":
-                    currentDraw.push({ ...shape, sides: 4, type: "sqr" });
-                    break;
-                case "rect":
-                    currentDraw.push({ ...shape, sides: 4, type: "rect" });
-                    break;
-                case "circle":
-                    const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                    currentDraw.push({ ...shape, sides: 1, type: "circle", r });
-                    break;
-                case "poly":
-                    const points = calculatePolygonPoints(x1, y1, x2, y2, sidenum);
-                    currentDraw.push({ ...shape, type: "poly", sides: sidenum, points});
-                    break;
-                case "ova":
-                    currentDraw.push({ ...shape, sides: 1, type: "ova" });
-                    break;
-                default:
-                    break;
-            }
+            const shape = { x1, y1, x2, y2, color, grosor, sides };
+            const shapeTypes = {
+                "linea": { ...shape, sides: 2, type: "linea" },
+                "sqr": { ...shape, sides: 4, type: "sqr" },
+                "rect": { ...shape, sides: 4, type: "rect" },
+                "circle": { ...shape, sides: 1, type: "circle", r: Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) },
+                "poly": { ...shape, type: "poly", sides: sidenum, points: calculatePolygonPoints(x1, y1, x2, y2, sidenum) },
+                "ova": { ...shape, sides: 1, type: "ova" }
+            };
+            currentDraw.push(shapeTypes[selectedMode] || {});
             if (currentDraw.length > 0) {
-                history.splice(historyIndex + 1); // Elimina los elementos después de la posición actual en el historial
+                history.splice(historyIndex + 1);
                 history.push(...currentDraw);
                 historyIndex = history.length - 1;
-
                 printHistory();
                 currentDraw = [];
             }
         }
     }
-
     canvas.addEventListener("mousedown", startDrawing);
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mouseup", stopDrawing);
@@ -254,8 +222,14 @@ document.addEventListener("DOMContentLoaded", function () {
         return null;
     }
 
+    function updatePolygonPoints(shape, dx, dy) {
+        for (let i = 0; i < shape.points.length; i++) {
+            shape.points[i].x += dx;
+            shape.points[i].y += dy;
+        }
+    }
+
     function moveShape(shape, x, y) {
-        // Actualiza las coordenadas de la forma
         const dx = x - shape.x1;
         const dy = y - shape.y1;
         shape.x1 += dx;
@@ -263,32 +237,21 @@ document.addEventListener("DOMContentLoaded", function () {
         shape.x2 += dx;
         shape.y2 += dy;
 
-        // Si la forma es un polígono, actualiza las coordenadas de los puntos
         if (shape.type === "poly") {
-            for (let i = 0; i < shape.points.length; i++) {
-                shape.points[i].x += dx;
-                shape.points[i].y += dy;
-            }
+            updatePolygonPoints(shape, dx, dy);
         }
     }
-    function rezsshape(shape, x, y) {
-        // Factor de escala para hacer el cambio de tamaño menos sensible
-        const scaleFactor = 0.1;
 
-        // Calcula la diferencia entre las nuevas coordenadas del mouse y las coordenadas actuales de la esquina inferior derecha de la figura
+    function resizeShape(shape, x, y) {
+        const scaleFactor = 0.1;
         const dx = (x - shape.x2) * scaleFactor;
         const dy = (y - shape.y2) * scaleFactor;
 
-        // Actualiza las coordenadas de la forma
         shape.x2 += dx;
         shape.y2 += dy;
 
-        // Si la forma es un polígono, actualiza las coordenadas de los puntos
         if (shape.type === "poly") {
-            for (let i = 0; i < shape.points.length; i++) {
-                shape.points[i].x += dx;
-                shape.points[i].y += dy;
-            }
+            updatePolygonPoints(shape, dx, dy);
         }
     }
 

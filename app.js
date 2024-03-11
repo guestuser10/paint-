@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let isDrawing = false;
     let x1, y1;
     let tempX2, tempY2;
+    let angle = 0;
     let selectedMode = null;
 
     let history = [];
@@ -63,6 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "resize";
     });
+    document.getElementById("roteBtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "rotate";
+    });
 
     document.getElementById("un_Btn").addEventListener("click", function () {
         if (historyIndex > 0) {
@@ -109,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function startDrawing(event) {
         const { x, y } = getCoordinates(event);
-        if (["move", "resize"].includes(selectedMode)) {
+        if (["move", "resize", "rotate"].includes(selectedMode)) {
             selectedShape = selectShape(x, y);
             isMoving = true;
         } else {
@@ -125,6 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 moveShape(selectedShape, x, y);
             } else if (selectedMode === "resize") {
                 resizeShape(selectedShape, x, y);
+            }else if (selectedMode === "rotate") {
+                rotateShape(selectedShape, x, y);
             }
             printHistory();
             drawPreview();
@@ -144,11 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const shape = { x1, y1, x2, y2, color, grosor, sides };
             const shapeTypes = {
                 "linea": { ...shape, sides: 2, type: "linea" },
-                "sqr": { ...shape, sides: 4, type: "sqr" },
-                "rect": { ...shape, sides: 4, type: "rect" },
+                "sqr": { ...shape, sides: 4, type: "sqr", angulo: 0},
+                "rect": { ...shape, sides: 4, type: "rect", angulo: 0},
                 "circle": { ...shape, sides: 1, type: "circle", r: Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) },
-                "poly": { ...shape, type: "poly", sides: sidenum, points: calculatePolygonPoints(x1, y1, x2, y2, sidenum) },
-                "ova": { ...shape, sides: 1, type: "ova" }
+                "poly": { ...shape, type: "poly", sides: sidenum, points: calculatePolygonPoints(x1, y1, x2, y2, sidenum), angulo: 0},
+                "ova": { ...shape, sides: 1, type: "ova", angulo: 0}
             };
             currentDraw.push(shapeTypes[selectedMode] || {});
             if (currentDraw.length > 0) {
@@ -168,26 +175,26 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.addEventListener("touchmove", (event) => draw(event.touches[0]));
     canvas.addEventListener("touchend", (event) => stopDrawing(event.changedTouches[0]));
 
-    function drawShape(shape, ctx, color, grosor, x1, y1, x2, y2, sides) {
+    function drawShape(shape, ctx, color, grosor, x1, y1, x2, y2, sides, angulo) {
         switch (shape) {
             case "linea":
                 dda(x1, y1, x2, y2, ctx, color, grosor);
                 break;
             case "sqr":
-                scuer(x1, y1, x2, y2, ctx, color, grosor);
+                scuer(x1, y1, x2, y2, ctx, color, grosor, angulo);
                 break;
             case "rect":
-                rectangle(x1, y1, x2, y2, ctx, color, grosor);
+                rectangle(x1, y1, x2, y2, ctx, color, grosor, angulo);
                 break;
             case "circle":
                 const r = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
                 circleBres(x1, y1, r, ctx, color, grosor);
                 break;
             case "poly":
-                drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2);
+                drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2, angulo);
                 break;
             case "ova":
-                oval(x1, y1, x2, y2, ctx, color, grosor);
+                oval(x1, y1, x2, y2, ctx, color, grosor, angulo);
                 break;
             default:
                 break;
@@ -196,9 +203,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function drawPreview() {
         if (selectedMode === "poly") {
-            drawPolygon(x1, y1, sidenum, ctx, color, grosor, tempX2, tempY2);
+            drawPolygon(x1, y1, sidenum, ctx, color, grosor, tempX2, tempY2, angle);
         } else {
-            drawShape(selectedMode, ctx, color, grosor, x1, y1, tempX2, tempY2);
+            drawShape(selectedMode, ctx, color, grosor, x1, y1, tempX2, tempY2, undefined, angle);
         }
     }
 
@@ -206,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
         clearCanvas(ctx, canvas);
         for (let i = 0; i <= historyIndex; i++) {
             const draw = history[i];
-            drawShape(draw.type, ctx, draw.color, draw.grosor, draw.x1, draw.y1, draw.x2, draw.y2, draw.sides);
+            drawShape(draw.type, ctx, draw.color, draw.grosor, draw.x1, draw.y1, draw.x2, draw.y2, draw.sides, draw.angulo);
         }
     }
 
@@ -252,6 +259,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (shape.type === "poly") {
             updatePolygonPoints(shape, dx, dy);
+        }
+    }
+    function rotateShape(shape, x, y) {
+        const scaleFactor = 0.1;
+        const dx = (x - shape.x2)* scaleFactor;
+        const dy = (y - shape.y2)* scaleFactor;
+
+        shape.angulo = Math.atan2(dy, dx);
+
+        if (shape.type === "linea") {
+            const dx = x - shape.x1;
+            const dy = y - shape.y1;
+            shape.x1 += dx;
+            shape.y1 += dy;
         }
     }
 

@@ -51,7 +51,7 @@ function dda(x, y, x2, y2, ctx, color, width) {
     }
 }
 //cuadrado
-function scuer(x, y, x2, y2, ctx, color, grosor) {
+function scuer(x, y, x2, y2, ctx, color, grosor, angulo) {
     let length = Math.min(Math.abs(x2 - x), Math.abs(y2 - y));
     let xSign = Math.sign(x2 - x);
     let ySign = Math.sign(y2 - y);
@@ -59,14 +59,28 @@ function scuer(x, y, x2, y2, ctx, color, grosor) {
     let x1 = x + length * xSign;
     let y1 = y + length * ySign;
 
-    dda(x, y, x1, y, ctx, color, grosor);
-    dda(x1, y, x1, y1, ctx, color, grosor);
-    dda(x1, y1, x, y1, ctx, color, grosor);
-    dda(x, y1, x, y, ctx, color, grosor);
+    let centerX = (x + x1) / 2;
+    let centerY = (y + y1) / 2;
+
+    let points = [[x, y], [x1, y], [x1, y1], [x, y1]];
+    let rotatedPoints = points.map(([px, py]) => {
+        let dx = px - centerX;
+        let dy = py - centerY;
+        return [
+            dx * Math.cos(angulo) - dy * Math.sin(angulo) + centerX,
+            dx * Math.sin(angulo) + dy * Math.cos(angulo) + centerY
+        ];
+    });
+
+    for (let i = 0; i < rotatedPoints.length; i++) {
+        let [xStart, yStart] = rotatedPoints[i];
+        let [xEnd, yEnd] = rotatedPoints[(i + 1) % rotatedPoints.length];
+        dda(xStart, yStart, xEnd, yEnd, ctx, color, grosor);
+    }
 }
 
 //rectangle
-function rectangle(x, y, x2, y2, ctx , color, grosor) {
+function rectangle(x, y, x2, y2, ctx, color, grosor, angulo) {
     let width = Math.abs(x2 - x);
     let height = Math.abs(y2 - y);
     let xSign = Math.sign(x2 - x);
@@ -75,10 +89,24 @@ function rectangle(x, y, x2, y2, ctx , color, grosor) {
     let x1 = x + width * xSign;
     let y1 = y + height * ySign;
 
-    dda(x, y, x1, y, ctx, color, grosor); 
-    dda(x1, y, x1, y1, ctx, color, grosor); 
-    dda(x1, y1, x, y1, ctx, color, grosor); 
-    dda(x, y1, x, y, ctx, color, grosor); 
+    let centerX = (x + x1) / 2;
+    let centerY = (y + y1) / 2;
+
+    let points = [[x, y], [x1, y], [x1, y1], [x, y1]];
+    let rotatedPoints = points.map(([px, py]) => {
+        let dx = px - centerX;
+        let dy = py - centerY;
+        return [
+            dx * Math.cos(angulo) - dy * Math.sin(angulo) + centerX,
+            dx * Math.sin(angulo) + dy * Math.cos(angulo) + centerY
+        ];
+    });
+
+    for (let i = 0; i < rotatedPoints.length; i++) {
+        let [xStart, yStart] = rotatedPoints[i];
+        let [xEnd, yEnd] = rotatedPoints[(i + 1) % rotatedPoints.length];
+        dda(xStart, yStart, xEnd, yEnd, ctx, color, grosor);
+    }
 }
 // circle
 function Circle(xc, yc, x, y, ctx, color, grosor) {
@@ -113,7 +141,7 @@ function circleBres(xc, yc, r, ctx, color, grosor) {
         Circle(xc, yc, x, y, ctx, color, grosor);
     }
 }
-function drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2) {
+function drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2, rotationAngle) {
     const centerX = x1;
     const centerY = y1;
     const radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
@@ -121,16 +149,16 @@ function drawPolygon(x1, y1, sides, ctx, color, grosor, x2, y2) {
     const angle = (2 * Math.PI) / sides;
     
     for (let i = 0; i < sides; i++) {
-        const startX = centerX + radius * Math.cos(i * angle);
-        const startY = centerY + radius * Math.sin(i * angle);
+        const startX = centerX + radius * Math.cos(i * angle + rotationAngle);
+        const startY = centerY + radius * Math.sin(i * angle + rotationAngle);
 
-        const endX = centerX + radius * Math.cos((i + 1) * angle);
-        const endY = centerY + radius * Math.sin((i + 1) * angle);
+        const endX = centerX + radius * Math.cos((i + 1) * angle + rotationAngle);
+        const endY = centerY + radius * Math.sin((i + 1) * angle + rotationAngle);
 
         dda(startX, startY, endX, endY, ctx, color, grosor);
     }
 }
-function oval(x1, y1, x2, y2,ctx, color, grosor) {
+function oval(x1, y1, x2, y2, ctx, color, grosor, angulo) {
     ctx.fillStyle = color;
     let a = Math.abs(x2 - x1);
     let b = Math.abs(y2 - y1);
@@ -140,42 +168,54 @@ function oval(x1, y1, x2, y2,ctx, color, grosor) {
     let err = dx + dy + b1 * a * a;
     let e2;
 
-    let aTimes8 = 8 * a;
-    let b1Times8 = 8 * b * b;
+    let centerX = (x1 + x2) / 2;
+    let centerY = (y1 + y2) / 2;
 
     [x1, x2] = x1 > x2 ? [x2, x2 + a] : [x1, x2];
     y1 = Math.min(y1, y2);
 
     y1 += (b + 1) / 2;
     y2 = y1 - b1;
-    aTimes8 = 8 * a;
-    b1Times8 = 8 * b * b;
 
     do {
-        ctx.fillRect(x2, y1, grosor,grosor);
-        ctx.fillRect(x1, y1, grosor,grosor);
-        ctx.fillRect(x1, y2, grosor,grosor);
-        ctx.fillRect(x2, y2, grosor,grosor);
-        e2 = 2 * err;
+        let rotatedPoints = [[x2, y1], [x1, y1], [x1, y2], [x2, y2]].map(([px, py]) => {
+            let dx = px - centerX;
+            let dy = py - centerY;
+            return [
+                dx * Math.cos(angulo) - dy * Math.sin(angulo) + centerX,
+                dx * Math.sin(angulo) + dy * Math.cos(angulo) + centerY
+            ];
+        });
 
+        rotatedPoints.forEach(([px, py]) => ctx.fillRect(px, py, grosor, grosor));
+
+        e2 = 2 * err;
         if (e2 <= dy) {
             y1++;
             y2--;
-            err += dy += aTimes8;
+            err += dy += 8 * a;
         }
-
         if (e2 >= dx || 2 * err > dy) {
             x1++;
             x2--;
-            err += dx += b1Times8;
+            err += dx += 8 * b * b;
         }
     } while (x1 <= x2);
 
-    while (y1 - y2 < b) {
-        ctx.fillRect(x1 - 1, y1, grosor,grosor);
-        ctx.fillRect(x2 + 1, y1++, grosor,grosor);
-        ctx.fillRect(x1 - 1, y2, grosor,grosor);
-        ctx.fillRect(x2 + 1, y2--, grosor,grosor);
+    while (y1 - y2 <= b) {
+        let rotatedPoints = [[x1 - 1, y1], [x2 + 1, y1], [x1 - 1, y2], [x2 + 1, y2]].map(([px, py]) => {
+            let dx = px - centerX;
+            let dy = py - centerY;
+            return [
+                dx * Math.cos(angulo) - dy * Math.sin(angulo) + centerX,
+                dx * Math.sin(angulo) + dy * Math.cos(angulo) + centerY
+            ];
+        });
+
+        rotatedPoints.forEach(([px, py]) => ctx.fillRect(px, py, grosor, grosor));
+
+        y1++;
+        y2--;
     }
 }
 function clearCanvas(ctx, canvas) {

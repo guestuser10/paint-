@@ -1,4 +1,4 @@
-import {dda, scuer, rectangle, circleBres, drawPolygon, oval, clearCanvas, drawDiamond, bresenham } from './shapes.js';
+import {dda, scuer, rectangle, circleBres, drawPolygon, oval, clearCanvas, drawDiamond, trapecio } from './shapes.js';
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
@@ -47,7 +47,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("romboBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "rombo";
-        console.log(selectedMode)
+    });
+    document.getElementById("trapbtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "trap";
     });
 
     document.getElementById("circleBtn").addEventListener("click", function () {
@@ -235,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "sqr": { ...shape, sides: 4, type: "sqr", angulo: 0},
                 "rombo": { ...shape, sides: 4, type: "rombo", angulo: 0},
                 "rect": { ...shape, sides: 4, type: "rect", angulo: 0},
+                "trap": { ...shape, sides: 4, type: "trap", angulo: 0},
                 "circle": { ...shape, sides: 1, type: "circle", r: Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) },
                 "poly": { ...shape, type: "poly", sides: sidenum, points: calculatePolygonPoints(x1, y1, x2, y2, sidenum), angulo: 0},
                 "ova": { ...shape, sides: 1, type: "ova", angulo: 0},
@@ -266,6 +270,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
             case "rombo":
                 drawDiamond(x1, y1, x2, y2, ctx, color, grosor, angulo);
+            break;
+            case "trap":
+                trapecio(x1, y1, x2, y2, ctx, color, grosor, angulo);
             break;
             case "rect":
                 rectangle(x1, y1, x2, y2, ctx, color, grosor, angulo);
@@ -388,6 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
             case "sqr":
             case "rect":
             case "rombo":
+            case "trap":
                 // Para un rectángulo o un cuadrado, puedes usar la misma lógica
                 return x >= shape.x1 && x <= shape.x2 && y >= shape.y1 && y <= shape.y2;
             case "circle":

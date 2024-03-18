@@ -127,6 +127,36 @@ function rectangle(x, y, x2, y2, ctx, color, grosor, angulo) {
         dda(xStart, yStart, xEnd, yEnd, ctx, color, grosor);
     }
 }
+
+function trapecio(x, y, x2, y2, ctx, color, grosor, angulo) {
+    let width = Math.abs(x2 - x);
+    let height = Math.abs(y2 - y);
+    let xSign = Math.sign(x2 - x);
+    let ySign = Math.sign(y2 - y);
+
+    let x1 = x + width * xSign;
+    let y1 = y + height * ySign;
+
+    let centerX = (x + x1) / 2;
+    let centerY = (y + y1) / 2;
+
+    let points = [[x, y], [x1, y], [x1 - width / 4, y1], [x + width / 4, y1]];
+    let rotatedPoints = points.map(([px, py]) => {
+        let dx = px - centerX;
+        let dy = py - centerY;
+        return [
+            dx * Math.cos(angulo) - dy * Math.sin(angulo) + centerX,
+            dx * Math.sin(angulo) + dy * Math.cos(angulo) + centerY
+        ];
+    });
+
+    for (let i = 0; i < rotatedPoints.length; i++) {
+        let [xStart, yStart] = rotatedPoints[i];
+        let [xEnd, yEnd] = rotatedPoints[(i + 1) % rotatedPoints.length];
+        dda(xStart, yStart, xEnd, yEnd, ctx, color, grosor);
+    }
+}
+
 // circle
 function Circle(xc, yc, x, y, ctx, color, grosor) {
     ctx.fillStyle = color;
@@ -240,4 +270,4 @@ function oval(x1, y1, x2, y2, ctx, color, grosor, angulo) {
 function clearCanvas(ctx, canvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-export { bresenham, dda, scuer, rectangle, Circle, circleBres, drawPolygon, oval,drawDiamond, clearCanvas };
+export { bresenham, dda, scuer, rectangle, Circle, circleBres, drawPolygon, oval,drawDiamond, clearCanvas, trapecio };

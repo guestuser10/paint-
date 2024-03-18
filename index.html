@@ -21,7 +21,7 @@
             <div class="form-box">
                 <div class="linea"></div>   
             </div>
-            <a onclick="event.preventDefault();">text</a>
+            <a onclick="event.preventDefault();">draw</a>
         </div>
         <div class="icon" id="sqrBtn">
             <div class="form-box">
@@ -40,6 +40,12 @@
                 <div class="rectangle"></div>   
             </div>
             <a onclick="event.preventDefault();">rombo</a>
+        </div>
+        <div class="icon" id="trapbtn">
+            <div class="form-box">
+                <div class="rectangle"></div>   
+            </div>
+            <a onclick="event.preventDefault();">trapecio</a>
         </div>
         <div class="icon" id="circleBtn">
             <div class="form-box">
@@ -77,7 +83,12 @@
             </div>
             <a onclick="event.preventDefault();">rotate</a>
         </div>
-        
+        <div class="icon" id="deletebtn">
+            <div class="form-box">
+                <img class="resize" src="https://cdn.discordapp.com/attachments/747285850609549424/1215461638422007808/nso_nesw.png?ex=65fcd5dc&is=65ea60dc&hm=d02b3b35aecbe200f39d187139f9432e8bd31bae890136343460d2ac4bd339f4&"></img>   
+            </div>
+            <a onclick="event.preventDefault();">delete</a>
+        </div>
     </span>
     <div class="container" itemprop="Paint"  >
         <canvas id="myCanvas" width="700" height="500" style="border:1px solid #000;" class="ctx"></canvas>

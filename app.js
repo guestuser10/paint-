@@ -73,6 +73,10 @@ document.addEventListener("DOMContentLoaded", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "resize";
     });
+    document.getElementById("deletebtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "delete";
+    });
     document.getElementById("roteBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "rotate";
@@ -84,9 +88,9 @@ document.addEventListener("DOMContentLoaded", function () {
             printHistory();
         }
     });
-
+    let changes = [];
     document.getElementById("clr_Btn").addEventListener("click", function () {
-        clearCanvas(ctx, canvas);history = [];currentDraw = [];historyIndex = -1;
+        clearCanvas(ctx, canvas);history = [];currentDraw = [];historyIndex = -1; changes = [];
     });
     
     
@@ -178,7 +182,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (["move", "resize", "rotate"].includes(selectedMode)) {
             selectedShape = selectShape(x, y);
             isMoving = true;
-        } else {
+        } else if (selectedMode === "delete") {
+            const shape = selectShape(x, y);
+            if (shape) {
+                history.splice(history.indexOf(selectedShape), 1);
+                printHistory();
+            }
+            if (shape === "free") {
+                changes.push(selectShape);
+                history.splice(history.indexOf(selectedShape), 1);
+                printHistory();
+            }
+        }else {
             isDrawing = true;
             [x1, y1, tempX2, tempY2] = [x, y, x, y];
         }
@@ -295,6 +310,15 @@ document.addEventListener("DOMContentLoaded", function () {
             if (isInsideShape(x, y, shape)) {
                 return shape;
             }
+            if (shape.type ==="free" ){
+                for (let j = 0; j < shape.points.length; j++) {
+                    const draw = shape.points[j];
+                    if (isInsideShape(x, y, draw)) {
+                        console.log(shape);
+                        return shape;
+                    }
+                }
+            }
         }
         return null;
     }
@@ -348,6 +372,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function isInsideShape(x, y, shape) {
         switch (shape.type) {
+            case "free":
+                for (let i = 0; i < shape.points.length; i++) {
+                    const point = shape.points[i];
+                    if (point.x1 === x && point.y1 === y ) {
+                        console.log("punto");
+                        return true;
+                    }
+                }
+                break;
             case "linea":
                 // Para una línea, comprobamos si el punto está cerca de la línea dentro de un cierto margen de error
                 const dist = Math.abs((shape.y2 - shape.y1) * x - (shape.x2 - shape.x1) * y + shape.x2 * shape.y1 - shape.y2 * shape.x1) / Math.sqrt(Math.pow(shape.y2 - shape.y1, 2) + Math.pow(shape.x2 - shape.x1, 2));

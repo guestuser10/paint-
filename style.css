@@ -80,7 +80,7 @@ h1, h2, h3, h4, h5, h6 {
 .ctx{
     background-color: white;
     border:3px solid var(--darker-blue);
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202772597306032178/nso_handwriting.png?ex=65ea5bc5&is=65d7e6c5&hm=1e8a08d8d87c7cea82ee8395367f2f4952eb7ab0a7f7ab85d06483053414980b&), auto;
+    cursor: url(./assets/nso_handwriting.cur), auto;
 }
 
 div[itemprop="Paint"]:before {
@@ -116,7 +116,7 @@ div[itemprop="Paint"]:before {
     height: 4rem;
     text-align: center;
     background-color: transparent;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
     margin: 1rem;
 }
 .form-box{
@@ -125,7 +125,7 @@ div[itemprop="Paint"]:before {
     width: 60%;
     height: 60%;
     background-color: transparent;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .linea {
     margin: 5px auto;
@@ -134,7 +134,7 @@ div[itemprop="Paint"]:before {
     transform: rotate(45deg);
     background-color: #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .cuadrado{
     margin: 5px auto;
@@ -142,7 +142,7 @@ div[itemprop="Paint"]:before {
     height: 50%;
     border: solid 4px #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .rectangle{
     margin: 5px auto;
@@ -150,7 +150,7 @@ div[itemprop="Paint"]:before {
     height: 40%;
     border: solid 4px #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .circle{
     margin: 5px auto;
@@ -159,7 +159,7 @@ div[itemprop="Paint"]:before {
     border-radius: 50%;
     border: solid 4px #4D23CD;
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .oval{
     margin: 5px auto;
@@ -168,7 +168,7 @@ div[itemprop="Paint"]:before {
     border-radius: 50%;
     border: solid 4px #4D23CD;  
     opacity: 0.5;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .config{
     position:relative;
@@ -207,17 +207,17 @@ div[itemprop="Paint"]:before {
     margin-bottom: 5px;
 }
 miniicon{
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .picbtn{
     width: 22px;margin: 1 rem;
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .move{
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .resize{
-    cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
+    cursor: url(./assets/nso_point.cur), auto;
 }
 .dropdown-content {
     display: none;
@@ -241,4 +241,23 @@ miniicon{
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+.rombo{
+    margin: 5px auto;
+    width: 50%;
+    height: 50%;
+    transform: rotate(45deg);
+    border: solid 4px #4D23CD;
+    opacity: 0.5;
+    cursor: url(./assets/nso_point.cur), auto;
+}
+.trapecio {
+    margin: 5px auto;
+    width: 100%;
+    height: 50%;
+    border: solid 4px #4D23CD;
+    opacity: 0.5;
+    cursor: url(./assets/nso_point.cur), auto;
+    background: #4D23CD;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
 }

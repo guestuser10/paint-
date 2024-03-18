@@ -219,3 +219,26 @@ miniicon{
 .resize{
     cursor: url(https://cdn.discordapp.com/attachments/747285850609549424/1202770232389795920/nso_point.png?ex=65ea5991&is=65d7e491&hm=559afa2ed09933e52d6cdaec3622d855116efc925b61f31b99bf947bdb4369df&), auto;
 }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}

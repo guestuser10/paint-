@@ -96,6 +96,52 @@ document.addEventListener("DOMContentLoaded", function () {
             printHistory();
         }
     });
+
+    document.getElementById("exportBtn").addEventListener("click", function () {
+        const data = JSON.stringify(history);
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "drawing.json";
+        a.click();
+    });
+
+    document.getElementById("importBtn").addEventListener("click", function () {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "application/json";
+        input.onchange = function (event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                history = JSON.parse(event.target.result);
+                historyIndex = history.length - 1;
+                printHistory();
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    });
+    
+    
+    document.getElementById("saveBtn").addEventListener("click", function () {
+        const data = canvas.toDataURL("image/png");
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white"; // Set the background color to white
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the entire canvas with white
+        const a = document.createElement("a");
+        a.href = data;
+        a.download = "drawing.png";
+        a.click();
+    });
+
+    document.getElementById("convert_to_pdf").addEventListener("click", function () {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'PNG', 0, 0);
+        pdf.save("download.pdf");
+    });
     
 
     this.getElementById("sides").addEventListener("change", function () {

@@ -78,7 +78,26 @@ function scuer(x, y, x2, y2, ctx, color, grosor, angulo) {
         dda(xStart, yStart, xEnd, yEnd, ctx, color, grosor);
     }
 }
+function drawDiamond(x, y, x2, y2, ctx, color, grosor, angulo) {
+    let centerX = (x + x2) / 2;
+    let centerY = (y + y2) / 2;
 
+    let points = [[centerX, y], [x2, centerY], [centerX, y2], [x, centerY]];
+    let rotatedPoints = points.map(([px, py]) => {
+        let dx = px - centerX;
+        let dy = py - centerY;
+        return [
+            dx * Math.cos(angulo) - dy * Math.sin(angulo) + centerX,
+            dx * Math.sin(angulo) + dy * Math.cos(angulo) + centerY
+        ];
+    });
+    
+    for (let i = 0; i < rotatedPoints.length; i++) {
+        let [xStart, yStart] = rotatedPoints[i];
+        let [xEnd, yEnd] = rotatedPoints[(i + 1) % rotatedPoints.length];
+        dda(xStart, yStart, xEnd, yEnd, ctx, color, grosor);
+    }
+}
 //rectangle
 function rectangle(x, y, x2, y2, ctx, color, grosor, angulo) {
     let width = Math.abs(x2 - x);
@@ -221,4 +240,4 @@ function oval(x1, y1, x2, y2, ctx, color, grosor, angulo) {
 function clearCanvas(ctx, canvas) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-export { bresenham, dda, scuer, rectangle, Circle, circleBres, drawPolygon, oval, clearCanvas };
+export { bresenham, dda, scuer, rectangle, Circle, circleBres, drawPolygon, oval,drawDiamond, clearCanvas };

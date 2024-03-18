@@ -1,4 +1,4 @@
-import {dda, scuer, rectangle, circleBres, drawPolygon, oval, clearCanvas } from './shapes.js';
+import {dda, scuer, rectangle, circleBres, drawPolygon, oval, clearCanvas, drawDiamond } from './shapes.js';
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
@@ -40,6 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "rect";
     });
+    document.getElementById("romboBtn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "rombo";
+        console.log(selectedMode)
+    });
 
     document.getElementById("circleBtn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
@@ -77,10 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("clr_Btn").addEventListener("click", function () {
-        clearCanvas(ctx, canvas);
-        history = [];
-        currentDraw = [];
-        historyIndex = -1;
+        clearCanvas(ctx, canvas);history = [];currentDraw = [];historyIndex = -1;
     });
     
     
@@ -152,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const shapeTypes = {
                 "linea": { ...shape, sides: 2, type: "linea" },
                 "sqr": { ...shape, sides: 4, type: "sqr", angulo: 0},
+                "rombo": { ...shape, sides: 4, type: "rombo", angulo: 0},
                 "rect": { ...shape, sides: 4, type: "rect", angulo: 0},
                 "circle": { ...shape, sides: 1, type: "circle", r: Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) },
                 "poly": { ...shape, type: "poly", sides: sidenum, points: calculatePolygonPoints(x1, y1, x2, y2, sidenum), angulo: 0},
@@ -171,9 +174,9 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mouseup", stopDrawing);
 
-    canvas.addEventListener("touchstart", (event) => startDrawing(event.touches[0]));
-    canvas.addEventListener("touchmove", (event) => draw(event.touches[0]));
-    canvas.addEventListener("touchend", (event) => stopDrawing(event.changedTouches[0]));
+    canvas.addEventListener("touchstart", (event) => {event.preventDefault();event.stopPropagation();startDrawing(event.touches[0])});
+    canvas.addEventListener("touchmove", (event) => {event.preventDefault();event.stopPropagation();draw(event.touches[0])});
+    canvas.addEventListener("touchend", (event) => {event.preventDefault();event.stopPropagation();stopDrawing(event.changedTouches[0])});
 
     function drawShape(shape, ctx, color, grosor, x1, y1, x2, y2, sides, angulo) {
         switch (shape) {
@@ -183,6 +186,9 @@ document.addEventListener("DOMContentLoaded", function () {
             case "sqr":
                 scuer(x1, y1, x2, y2, ctx, color, grosor, angulo);
                 break;
+            case "rombo":
+                drawDiamond(x1, y1, x2, y2, ctx, color, grosor, angulo);
+            break;
             case "rect":
                 rectangle(x1, y1, x2, y2, ctx, color, grosor, angulo);
                 break;
@@ -219,6 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function selectShape(x, y) {
         // Recorre el array de formas
+        
         for (let i = 0; i < history.length; i++) {
             const shape = history[i];
             // Comprueba si las coordenadas dadas están dentro de la forma
@@ -284,6 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return dist <= 5; // Aquí, 5 es el margen de error
             case "sqr":
             case "rect":
+            case "rombo":
                 // Para un rectángulo o un cuadrado, puedes usar la misma lógica
                 return x >= shape.x1 && x <= shape.x2 && y >= shape.y1 && y <= shape.y2;
             case "circle":

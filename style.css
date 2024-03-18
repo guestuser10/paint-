@@ -105,6 +105,8 @@ div[itemprop="Paint"]:before {
 .formas {
     display: flex;
     flex-direction: column;
+    
+    max-width: 30%;
     flex-wrap: wrap;
     position: relative;
     float: left;

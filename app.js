@@ -92,11 +92,11 @@ document.addEventListener("DOMContentLoaded", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "front";
     });
-    document.getElementById("sendfront_btn").addEventListener("click", function () {
+    document.getElementById("sendback_btn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "back";
     });
-    document.getElementById("sendfront_btn").addEventListener("click", function () {
+    document.getElementById("sendup_btn").addEventListener("click", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "up";
     });
@@ -223,11 +223,17 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log(history);
         }else if (selectedMode === "back") {
             let shaped = selectShape(x, y, true);
+            if (shaped.index <1){
+                return;
+            }
             invert_position(shaped.index,shaped.index-1,history);
             printHistory();
             console.log(history);
         }else if (selectedMode === "up") {
             let shaped = selectShape(x, y, true);
+            if (shaped.index == historyIndex){
+                return;
+            }
             invert_position(shaped.index,shaped.index+1,history);
             printHistory();
             console.log(history);

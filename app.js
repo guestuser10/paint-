@@ -84,7 +84,22 @@ document.addEventListener("DOMContentLoaded", function () {
         sidefilter.style.visibility = "hidden";
         selectedMode = "rotate";
     });
-
+    document.getElementById("sendbottom_btn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "bottom";
+    });
+    document.getElementById("sendfront_btn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "front";
+    });
+    document.getElementById("sendfront_btn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "back";
+    });
+    document.getElementById("sendfront_btn").addEventListener("click", function () {
+        sidefilter.style.visibility = "hidden";
+        selectedMode = "up";
+    });
     document.getElementById("un_Btn").addEventListener("click", function () {
         if (historyIndex > 0) {
             historyIndex--;
@@ -196,6 +211,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 history.splice(history.indexOf(selectedShape), 1);
                 printHistory();
             }
+        }else if (selectedMode === "bottom") {
+            let shaped = selectShape(x, y, true);
+            invert_position(shaped.index,0,history);
+            printHistory();
+            console.log(history);
+        }else if (selectedMode === "front") {
+            let shaped = selectShape(x, y, true);
+            invert_position(shaped.index,historyIndex,history);
+            printHistory();
+            console.log(history);
+        }else if (selectedMode === "back") {
+            let shaped = selectShape(x, y, true);
+            invert_position(shaped.index,shaped.index-1,history);
+            printHistory();
+            console.log(history);
+        }else if (selectedMode === "up") {
+            let shaped = selectShape(x, y, true);
+            invert_position(shaped.index,shaped.index+1,history);
+            printHistory();
+            console.log(history);
         }else {
             isDrawing = true;
             [x1, y1, tempX2, tempY2] = [x, y, x, y];
@@ -234,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const { x: x2, y: y2 } = getCoordinates(event);
             const shape = { x1, y1, x2, y2, color, grosor, sides };
             const shapeTypes = {
-                "linea": { ...shape, sides: 2, type: "linea" },
+                "linea": { ...shape, sides: 2, type: "linea"},
                 "sqr": { ...shape, sides: 4, type: "sqr", angulo: 0},
                 "rombo": { ...shape, sides: 4, type: "rombo", angulo: 0},
                 "rect": { ...shape, sides: 4, type: "rect", angulo: 0},
@@ -244,6 +279,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 "ova": { ...shape, sides: 1, type: "ova", angulo: 0},
                 "free": {type: "free", points: [...currentfree], angulo: 0}
             };
+            
+            console.log(history);
             currentfree = [];
             currentDraw.push(shapeTypes[selectedMode] || {});
             if (currentDraw.length > 0) {
@@ -307,21 +344,28 @@ document.addEventListener("DOMContentLoaded", function () {
             drawShape(draw.type, ctx, draw.color, draw.grosor, draw.x1, draw.y1, draw.x2, draw.y2, draw.sides, draw.angulo, draw.points);
         }
     }
+    function invert_position(historyIndex, position, history){ 
+        var temp = history[historyIndex];
+        history[historyIndex] = history[position];
+        history[position] = temp;
+    }
 
-    function selectShape(x, y) {
+    function selectShape(x, y, inv) {
         // Recorre el array de formas
         
         for (let i = 0; i < history.length; i++) {
             const shape = history[i];
             // Comprueba si las coordenadas dadas están dentro de la forma
             if (isInsideShape(x, y, shape)) {
+                if (inv===true){
+                    return {shape: shape, index: i};
+                }
                 return shape;
             }
             if (shape.type ==="free" ){
                 for (let j = 0; j < shape.points.length; j++) {
                     const draw = shape.points[j];
                     if (isInsideShape(x, y, draw)) {
-                        console.log(shape);
                         return shape;
                     }
                 }
